@@ -1,0 +1,28 @@
+# Reading netCDF files
+
+import numpy as np
+from scipy.io import netcdf
+import os
+
+directory = "C:\Users\judithg\Documents\Python Scripts\Majuro_SL_Anomaly"
+lats=[]
+lons=[]
+pt = [7.1,171.367] #coordinates of desired point
+sl_subset = []
+tim_subset = []
+for root,dirs,files in os.walk(directory):
+    for file in files:
+        #print file
+        if file.endswith(".nc"):
+            f = netcdf.netcdf_file(file, 'r')
+            lats = np.append(lats, f.variables['lat'][:])
+            lons = np.append(lons, f.variables['lon'][:])
+            closestlon=np.argmin(np.sqrt(np.square(lons-pt[1])))
+            closestlat=np.argmin(np.sqrt(np.square(lats-pt[0])))
+            #print closestlat,closestlon
+            sl_subset = np.append(sl_subset, f.variables['sla'][:,closestlat,closestlon]*0.0001)
+            tim_subset = np.append(tim_subset, f.variables['time'][:])
+
+np.savetxt('Majuro_SL_altimetry.txt', sl_subset, fmt='%f')
+np.savetxt('Majuro_time_altimetry.txt', tim_subset, fmt='f')
+
