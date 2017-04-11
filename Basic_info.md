@@ -1,7 +1,7 @@
 # Learning
 Scripts compiled while learning python
 
-#####Basic info on opening text and plotting graphs
+## Basic info on opening text and plotting graphs
 filename='RMI_sea_level_data_2016.csv'
 
 import numpy as np
@@ -15,7 +15,7 @@ time = np.loadtxt(filename, delimiter=',', skiprows=1, unpack=True, converters={
 time_cor = time[0,:]
 
 #######################################
-## plotting the yearly sealevel data
+## Plotting the yearly sealevel data
 years = YearLocator()   # every year
 months = MonthLocator()  # every month
 yearsFmt = DateFormatter('%b')
@@ -32,7 +32,7 @@ ax.xaxis.set_major_formatter(yearsFmt)
 ax.autoscale_view()
 plt.show()
 
-## using a loop to determine monthly maxima, mean, and percentile
+## Using a loop to determine monthly maxima, mean, and percentile
 f=open('RMI_output_2016.txt', 'w')
 i=00
 for i in range(1,12):
@@ -60,7 +60,7 @@ f.close()
 np.savetxt('sealevel_2016.txt', sealevel, fmt='%f')
 np.savetxt('time_2016.txt', time_cor, fmt='%f')
 
-#######Info on comparing SOI and sealevel when the time of SOI does not align with the sealevel time recorded
+## Info on comparing SOI and sealevel when the time of SOI does not align with the sealevel time recorded
 import numpy as np
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
@@ -71,7 +71,7 @@ import datetime as datetime
 sealevel = np.loadtxt('RMI_sealevel_1993-2016.txt', delimiter ='\t', dtype=float)
 time = np.loadtxt('RMI_time_1993-2016.txt', delimiter = '\t', dtype=float)
 
-# inputting SOI data
+# Inputting SOI data
 filename = 'NOAA_SOI.txt'
 SOI_data = np.loadtxt(filename, delimiter = '\t', skiprows=1, usecols=[1], dtype=float)
 SOI_time = np.loadtxt(filename, delimiter = '\t', skiprows=1, usecols=[0], unpack=True, converters={0: mdates.strpdate2num('%Y%m')})
@@ -101,7 +101,7 @@ print Pearson_Corr
 Cross_corr = np.correlate(SOI_data_apl[indexnonnan], Mean_sealevel[indexnonnan])
 print Cross_corr
 
-## plotting the yearly SOI data
+## Plotting the yearly SOI data
 years = YearLocator()   # every year
 months = MonthLocator()  # every month
 yearsFmt = DateFormatter('%Y')
@@ -123,7 +123,7 @@ ax.xaxis.set_major_formatter(yearsFmt)
 ax.xaxis.set_major_locator(ticker.MultipleLocator(1000))
 plt.show()
 
-##########Handling ONI data
+## Handling ONI data
 filename= 'ONI_data_Copy.txt'
 data= np.loadtxt(filename, usecols=(1,2,3,4,5,6,7,8,9,10,11,12))
 print np.shape(data)
@@ -146,7 +146,7 @@ ONI_ind_apl = ONI_ind[ind]
 
 ONI_ind_apl[ONI_ind_apl==-99.9]=np.nan
 
-# plotting graph
+#plotting graph
 years = YearLocator()   # every year
 months = MonthLocator()  # every month
 yearsFmt = DateFormatter('%Y')
