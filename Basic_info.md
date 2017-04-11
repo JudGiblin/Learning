@@ -71,7 +71,7 @@ import datetime as datetime
 sealevel = np.loadtxt('RMI_sealevel_1993-2016.txt', delimiter ='\t', dtype=float)
 time = np.loadtxt('RMI_time_1993-2016.txt', delimiter = '\t', dtype=float)
 
-# Inputting SOI data
+## Inputting SOI data
 filename = 'NOAA_SOI.txt'
 SOI_data = np.loadtxt(filename, delimiter = '\t', skiprows=1, usecols=[1], dtype=float)
 SOI_time = np.loadtxt(filename, delimiter = '\t', skiprows=1, usecols=[0], unpack=True, converters={0: mdates.strpdate2num('%Y%m')})
@@ -168,3 +168,52 @@ ax.xaxis.set_major_formatter(yearsFmt)
 ax.xaxis.set_major_locator(ticker.MultipleLocator(800))
 plt.show()
 fig.savefig('RMI Sealevel vs ONI.jpeg')
+
+# Reading RMI tidegauge data from files in a directory
+
+import os
+import csv
+import numpy as np
+import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
+from matplotlib.dates import YearLocator, MonthLocator, DateFormatter
+directory = "C:\Users\judithg\Documents\Python Scripts\RMI_sealevel"
+sealevel=[]
+time=[]
+for root,dirs,files in os.walk(directory):
+for root,dirs,files in os.walk(directory):
+    ##name1='IDO70002_'
+    ##xt='.csv'
+    ##for i in range(1993:2017):
+       #filename = name1 + str(i) + xt
+    for file in files:
+        print file
+        if file.endswith(".csv"):
+            sealevel = np.append(sealevel, np.loadtxt(file, delimiter = ',', skiprows=1, usecols=[1], dtype=float))
+            time = np.append(time, np.genfromtxt(file, delimiter=',', skiprows=1, usecols=[0], unpack=True, converters={0: mdates.strpdate2num('%d-%b-%Y %H:%M')}))
+
+indx = sealevel>-8000
+sealevel_cor = sealevel[indx]
+time_cor = time[indx]
+
+##Ploting graph
+##plotting the yearly sealevel data
+years = YearLocator()   # every year
+months = MonthLocator()  # every month
+yearsFmt = DateFormatter('%Y')
+
+fig = plt.figure(1, figsize=(12,5))
+plt.plot_date(time_cor,sealevel_cor,'k')
+plt.xlabel('Years')
+plt.ylabel('Sea level data [m]')
+plt.grid(True)
+plt.title('RMI Sea Level Data')
+ax=plt.gca()
+ax.xaxis.set_major_locator(years)
+ax.xaxis.set_major_formatter(yearsFmt)
+ax.autoscale_view()
+plt.show()
+##saving data
+fig.savefig('RMI_sealevel_1993-2016.jpeg')
+np.savetxt('RMI_sealevel_1993-2016.txt', sealevel_cor, fmt='%f')
+np.savetxt('RMI_time_1993-2016.txt', time_cor, fmt='%f')
